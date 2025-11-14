@@ -2,7 +2,7 @@
 //  RegistrationView.swift
 //  CareService
 //
-//  Created by Kamila Ponomarova on 2025-05-22.
+//  Created by Kaukab Farrukh on 2025-05-22.
 //
 
 

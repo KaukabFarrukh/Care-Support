@@ -2,7 +2,7 @@
 //  CareServiceApp.swift
 //  CareService
 //
-//  Created by Kamila Ponomarova on 2025-05-22.
+//  Created by Kaukabb Farrukh on 2025-05-22.
 //
 
 import SwiftUI

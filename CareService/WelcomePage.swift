@@ -2,12 +2,13 @@
 //  WelcomePage.swift
 //  CareService
 //
-//  Created by Kamila Ponomarova on 2025-05-22.
+//  Created by Kaukab Farrukh on 2025-05-22.
 //
 
 
 
 import SwiftUI
+import Lottie
 
 struct WelcomePage: View {
     var body: some View {
@@ -18,17 +19,17 @@ struct WelcomePage: View {
                         .ignoresSafeArea()
 
                     VStack(spacing: 20) {
+                        // Animated Lottie Icon (replacing static image)
                         ZStack {
                             Circle()
                                 .fill(Color.white.opacity(0.2))
                                 .frame(width: geometry.size.width * 0.3)
                                 .shadow(color: .blue.opacity(0.5), radius: 20)
-                            Image(systemName: "heart.text.square.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: geometry.size.width * 0.2)
-                                .foregroundColor(.blue)
-                                .shadow(color: .white, radius: 10)
+
+                            // Add your Lottie animation here
+                            LottieView(animationName: "care_animation", loopMode: .loop)
+                                .frame(width: geometry.size.width * 0.2, height: geometry.size.width * 0.2)
+                                .accessibilityLabel("Animated Care Icon")
                         }
 
                         Text("This App helps you")
