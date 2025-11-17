@@ -93,7 +93,7 @@ struct LoginView: View {
 
                         Spacer()
 
-                        NavigationLink("", destination: RecommendationsView1(), isActive: $isLoggedIn)
+                        NavigationLink("", destination: CareHomeView(), isActive: $isLoggedIn)
                             .hidden()
                     }
                     .padding()

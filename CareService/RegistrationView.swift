@@ -5,8 +5,6 @@
 //  Created by Kaukab Farrukh on 2025-05-22.
 //
 
-
-
 import SwiftUI
 
 struct EcureTextField: View {
@@ -36,7 +34,8 @@ struct RegistrationView: View {
     @State private var name = ""
     @State private var contacts = ""
     @State private var password = ""
-    @State var navigateToGeneralInfo = false
+
+    @State private var navigateToSurvey = false      // 👈 renamed, now goes to Survey12
 
     @State var firebase = Firebasecode()
 
@@ -51,18 +50,27 @@ struct RegistrationView: View {
                             .font(.title)
                             .padding(.bottom, 40)
 
-                        TextField("", text: $name, prompt: Text("Enter your name and last name").foregroundColor(.gray))
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            .frame(width: min(geometry.size.width * 0.8, 400))
+                        TextField(
+                            "",
+                            text: $name,
+                            prompt: Text("Enter your name and last name").foregroundColor(.gray)
+                        )
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .frame(width: min(geometry.size.width * 0.8, 400))
 
-                        TextField("", text: $contacts, prompt: Text("Enter e-mail").foregroundColor(.gray))
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            .frame(width: min(geometry.size.width * 0.8, 400))
+                        TextField(
+                            "",
+                            text: $contacts,
+                            prompt: Text("Enter e-mail").foregroundColor(.gray)
+                        )
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .frame(width: min(geometry.size.width * 0.8, 400))
 
+                        // if you actually use EcureTextField else where, keep SecureTextField as is
                         SecureTextField(text: $password)
                             .frame(width: min(geometry.size.width * 0.8, 400))
 
@@ -74,7 +82,8 @@ struct RegistrationView: View {
 
                         Button(action: {
                             firebase.userRegister(email: contacts, password: password, name: name)
-                            navigateToGeneralInfo = true
+                            // For now we go directly to the survey after tapping Sign up
+                            navigateToSurvey = true
                         }) {
                             Text("Sign up")
                                 .foregroundColor(Color.blue)
@@ -89,8 +98,9 @@ struct RegistrationView: View {
                     .padding()
                     .navigationBarTitle("Profile", displayMode: .inline)
                 }
-                .navigationDestination(isPresented: $navigateToGeneralInfo) {
-                    ContentView()
+                .navigationDestination(isPresented: $navigateToSurvey) {
+                    // 👇 After successful sign-up we go straight to Survey12
+                    Survey12()
                 }
             }
         }
