@@ -1,6 +1,6 @@
 //
 //  StartPageView.swift
-//  CareService
+//  CareSupport
 //
 //  Created by Kaukab Farrukh on 2025-05-22.
 //
@@ -10,18 +10,23 @@ import AVFoundation
 import Lottie
 
 struct StartPageView: View {
-    @State private var showAlert = false
+    @State private var showInfoAlert = false
     @State private var showHelpSheet = false
+    @State private var showCallAlert = false
+
     private let speechSynthesizer = AVSpeechSynthesizer()
+
+    // Your emergency caregiver / support number
+    private let emergencyNumber = "+46704149663"
 
     var body: some View {
         NavigationStack {
             ZStack {
-                // Background Gradient
+                // MARK: - Background
                 LinearGradient(
                     gradient: Gradient(colors: [
-                        Color(red: 0.83, green: 0.93, blue: 1.0),  // Light cyan
-                        Color(red: 0.73, green: 0.85, blue: 1.0),  // Soft lavender-blue
+                        Color("background"),                               // mint from Assets
+                        Color(red: 0.88, green: 1.0, blue: 0.95),          // softer mint
                         Color.white
                     ]),
                     startPoint: .top,
@@ -29,121 +34,174 @@ struct StartPageView: View {
                 )
                 .ignoresSafeArea()
 
-                VStack(spacing: 30) {
-                    Spacer()
+                VStack(spacing: 24) {
+                    Spacer(minLength: 40)
 
-                    // Lottie Animation
-                    LottieView(animationName: "care_animation", loopMode: .loop)
-                        .frame(width: 150, height: 150)
-                        .accessibilityLabel("Animated Care Logo")
+                    // MARK: - App Card
+                    VStack(spacing: 20) {
+                        // Logo / Animation
+                        LottieView(animationName: "care_animation", loopMode: .loop)
+                            .frame(width: 120, height: 120)
+                            .accessibilityLabel("Animated care logo")
 
-                    Text("Care Support")
-                        .font(.system(size: 40, weight: .bold, design: .rounded))
-                        .foregroundColor(.blue)
-                        .shadow(radius: 5)
-                        .accessibilityLabel("App name: Care Support")
+                        VStack(spacing: 6) {
+                            Text("Care Support")
+                                .font(.system(size: 32, weight: .bold, design: .rounded))
+                                .foregroundColor(Color(red: 0.10, green: 0.60, blue: 0.55))
+                                .accessibilityLabel("App name Care Support")
 
-                    Text("Elderly Care Service")
-                        .font(.headline)
-                        .foregroundColor(.black.opacity(0.9))
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.blue.opacity(0.7))
-                        .cornerRadius(20)
-                        .accessibilityLabel("Service: Elderly Care")
-
-                    // General Info Button
-                    Button("General Information") {
-                        showAlert = true
-                    }
-                    .font(.subheadline)
-                    .padding()
-                    .frame(maxWidth: 250)
-                    .background(Color.white.opacity(0.85))
-                    .foregroundColor(.black)
-                    .cornerRadius(15)
-                    .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.white.opacity(0.3), lineWidth: 1))
-                    .accessibilityLabel("General information about the app")
-                    .alert(isPresented: $showAlert) {
-                        Alert(
-                            title: Text("General Information"),
-                            message: Text("This app helps care for elderly or sick persons. After registration, you'll complete a short survey to build a care plan. Includes a symptom diary and expert-written articles."),
-                            dismissButton: .default(Text("OK"))
-                        )
-                    }
-
-                    // Start Button with Haptic Feedback
-                    NavigationLink(destination: WelcomePage()) {
-                        Text("Start")
-                            .font(.headline)
-                            .foregroundColor(.black)
-                            .frame(width: 140, height: 50)
-                            .background(Color.white)
-                            .cornerRadius(25)
-                            .shadow(color: .blue.opacity(0.3), radius: 10, x: 0, y: 5)
-                    }
-                    .simultaneousGesture(TapGesture().onEnded {
-                        let generator = UIImpactFeedbackGenerator(style: .medium)
-                        generator.impactOccurred()
-                    })
-                    .accessibilityLabel("Start using the app")
-
-                    // Emergency SOS Button
-                    Button(action: {
-                        let generator = UIImpactFeedbackGenerator(style: .rigid)
-                        generator.impactOccurred()
-
-                        if let url = URL(string: "tel://1177") {
-                            UIApplication.shared.open(url)
+                            Text("Your daily care companion")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .multilineTextAlignment(.center)
                         }
-                    }) {
-                        Label("Call Emergency", systemImage: "phone.fill")
-                            .padding()
-                            .frame(width: 200)
-                            .foregroundColor(.white)
-                            .background(Color.red)
-                            .cornerRadius(25)
-                            .shadow(radius: 5)
+
+                        // Tag / pill
+                        Text("Elderly & home care service")
+                            .font(.caption)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 6)
+                            .background(
+                                Color(red: 0.10, green: 0.60, blue: 0.55)
+                                    .opacity(0.15)
+                            )
+                            .foregroundColor(Color(red: 0.10, green: 0.60, blue: 0.55))
+                            .clipShape(Capsule())
+                            .accessibilityLabel("Service: elderly and home care")
+
+                        Divider()
+                            .padding(.top, 4)
+
+                        // MARK: - Buttons inside card
+                        VStack(spacing: 12) {
+                            // General Info (secondary)
+                            Button(action: {
+                                showInfoAlert = true
+                            }) {
+                                HStack {
+                                    Image(systemName: "info.circle")
+                                    Text("General Information")
+                                }
+                                .font(.subheadline)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.white.opacity(0.8))
+                                .foregroundColor(.primary)
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(Color.black.opacity(0.05), lineWidth: 1)
+                                )
+                            }
+                            .alert("General Information", isPresented: $showInfoAlert) {
+                                Button("OK", role: .cancel) {}
+                            } message: {
+                                Text("This app helps care for elderly or sick persons. After registration, you'll complete a short survey to build a care plan. It includes a symptom diary and expert-written articles.")
+                            }
+                            .accessibilityLabel("General information about the app")
+
+                            // Start (primary)
+                            NavigationLink(destination: WelcomePage()) {
+                                Text("Start")
+                                    .font(.headline)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 50)
+                                    .background(Color(red: 0.10, green: 0.60, blue: 0.55))
+                                    .foregroundColor(.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                    .shadow(color: Color(red: 0.10, green: 0.60, blue: 0.55).opacity(0.3),
+                                            radius: 10, x: 0, y: 5)
+                            }
+                            .simultaneousGesture(TapGesture().onEnded {
+                                let generator = UIImpactFeedbackGenerator(style: .medium)
+                                generator.impactOccurred()
+                            })
+                            .accessibilityLabel("Start using the app")
+                        }
                     }
-                    .accessibilityLabel("Call emergency caregiver")
+                    .padding(24)
+                    .frame(maxWidth: 340)
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                    .shadow(color: .black.opacity(0.1), radius: 18, x: 0, y: 10)
 
                     Spacer()
-                }
-                .padding()
 
-                // Floating Help Icon (bottom-right)
-                VStack {
-                    Spacer()
-                    HStack {
-                        Spacer()
+                    // MARK: - Emergency Section + Help Button
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Need urgent support?")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
 
                         Button(action: {
-                            speak(text: "This screen helps you start your care plan, call 1177 for medical help, or get more information.")
-                            showHelpSheet = true
+                            let generator = UIImpactFeedbackGenerator(style: .rigid)
+                            generator.impactOccurred()
+                            callEmergencyContact()
                         }) {
-                            Image(systemName: "questionmark.circle.fill")
-                                .resizable()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.blue)
-                                .padding()
+                            HStack(spacing: 12) {
+                                Image(systemName: "phone.fill")
+                                    .font(.title3)
+                                    .padding(10)
+                                    .background(Color.white.opacity(0.2))
+                                    .clipShape(Circle())
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Call emergency contact")
+                                        .font(.subheadline.weight(.semibold))
+                                    Text("Connect to your caregiver or family member")
+                                        .font(.caption)
+                                        .foregroundColor(.white.opacity(0.85))
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption.weight(.semibold))
+                                    .opacity(0.9)
+                            }
+                            .padding()
+                            .background(Color(red: 1.00, green: 0.42, blue: 0.42))
+                            .foregroundColor(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                            .shadow(color: Color(red: 1.00, green: 0.42, blue: 0.42).opacity(0.4),
+                                    radius: 10, x: 0, y: 5)
                         }
-                        .accessibilityLabel("Help information")
+                        .accessibilityLabel("Call your emergency caregiver")
+
+                        // Help button aligned to the right, under the card
+                        HStack {
+                            Spacer()
+                            Button(action: {
+                                speak(text: "This screen helps you start your care plan, read general information, or call your emergency caregiver for help.")
+                                showHelpSheet = true
+                            }) {
+                                Image(systemName: "questionmark.circle.fill")
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .foregroundColor(Color(red: 0.10, green: 0.60, blue: 0.55))
+                            }
+                            .accessibilityLabel("Help information")
+                        }
                     }
-                }
-            }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 24)
+                    .alert("Calling not supported", isPresented: $showCallAlert) {
+                        Button("OK", role: .cancel) {}
+                    } message: {
+                        Text("This device cannot make phone calls.")
+                    }
+                } // end VStack(spacing: 24)
+            } // end ZStack
             .onAppear {
                 speakWelcomeMessage()
             }
             .sheet(isPresented: $showHelpSheet) {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("🆘 Help & Info")
-                        .font(.title)
-                        .fontWeight(.bold)
+                        .font(.title2.weight(.bold))
 
-                    Text("• Tap **Start** to begin your care plan.")
+                    Text("• Tap **Start** to begin your care plan and answer a short survey.")
                     Text("• Tap **General Information** to learn how the app works.")
-                    Text("• Tap **Call Emergency** to reach 1177 for medical advice.")
-                    Text("• Tap the mic (coming soon) to record symptoms.")
+                    Text("• Tap **Call emergency contact** to reach your caregiver or family member.")
+                    Text("• Voice features will help you if reading small text is difficult.")
 
                     Spacer()
 
@@ -153,21 +211,39 @@ struct StartPageView: View {
                     .font(.headline)
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
+                    .background(Color(red: 0.10, green: 0.60, blue: 0.55))
                     .foregroundColor(.white)
-                    .cornerRadius(12)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
                 .padding()
             }
+        } // end NavigationStack
+    }
+
+    // MARK: - Emergency Call Logic
+
+    private func callEmergencyContact() {
+        let cleaned = emergencyNumber.replacingOccurrences(of: " ", with: "")
+
+        guard let url = URL(string: "tel://\(cleaned)") else {
+            showCallAlert = true
+            return
+        }
+
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            showCallAlert = true   // e.g. on iPad without calling ability
         }
     }
 
     // MARK: - Speech Functions
 
     private func speakWelcomeMessage() {
-        let message = "Welcome to Care Support. Your assistant for elderly and health care. Tap start to begin."
+        let message = "Welcome to Care Support. Your assistant for elderly and home care. Tap start to begin."
         let utterance = AVSpeechUtterance(string: message)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.rate = 0.48
         speechSynthesizer.speak(utterance)
     }
 
@@ -182,3 +258,4 @@ struct StartPageView: View {
 #Preview {
     StartPageView()
 }
+
