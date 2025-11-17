@@ -5,8 +5,6 @@
 //  Created by Kaukab Farrukh on 2025-05-22.
 //
 
-
-
 import SwiftUI
 
 struct Frame23View: View {
@@ -20,8 +18,8 @@ struct Frame23View: View {
     }()
     @State private var weight: Float = UserDefaults.standard.float(forKey: "savedWeight")
     @State private var pressure: String = UserDefaults.standard.string(forKey: "savedBloodPressure") ?? "0 / 0"
-    @State private var oxygen: Int = UserDefaults.standard.integer(forKey: "savedOxygen")
-    @State private var pulse: Int = UserDefaults.standard.integer(forKey: "savedPulse")
+    @State private var oxygen: Float = UserDefaults.standard.float(forKey: "savedOxygen")
+    @State private var pulse: Float = UserDefaults.standard.float(forKey: "savedPulse")
     @State private var temperature: Float = UserDefaults.standard.float(forKey: "savedBodyTemperature")
     @State private var sugarLevel: Float = UserDefaults.standard.float(forKey: "savedBloodSugarLevel")
 
@@ -60,7 +58,7 @@ struct Frame23View: View {
                         entryField(label: "Age", value: age)
                         entryField(label: "Weight", value: "\(weight) kg")
                         entryField(label: "Pressure", value: "\(pressure) mmHg")
-                        entryField(label: "Oxygen", value: "\(oxygen)%")
+                        entryField(label: "Oxygen", value: "\(oxygen) %")
                         entryField(label: "Pulse", value: "\(pulse) bpm")
                         entryField(label: "Body Temperature", value: "\(temperature)°C")
                         entryField(label: "Sugar Level", value: "\(sugarLevel) mmol/L")

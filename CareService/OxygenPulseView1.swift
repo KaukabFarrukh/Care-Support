@@ -1,11 +1,9 @@
 //
 //  OxygenPulseView1.swift
-//  CareService
+//  CareSupport
 //
 //  Created by Kaukab Farrukh on 2025-05-22.
 //
-
-
 
 import SwiftUI
 
@@ -18,7 +16,7 @@ struct OxygenKeyButton: View {
             Text(key)
                 .font(.title2)
                 .fontWeight(.semibold)
-                .foregroundColor(.blue) // Синие цифры
+                .foregroundColor(.blue)
                 .frame(width: 70, height: 60)
                 .background(Color.white)
                 .cornerRadius(12)
@@ -64,7 +62,7 @@ struct OxygenPulseView1: View {
             Text("Oxygen and Pulse")
                 .font(.title2)
                 .foregroundColor(.secondary)
-            Text("Please enter your or the care receiver's oxygen saturation data and pulse")
+            Text("Please enter your or the care receiver's oxygen saturation data and pulse.")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
@@ -117,7 +115,10 @@ struct OxygenPulseView1: View {
     }
 
     private var nextButton: some View {
-        NavigationLink(destination: OxygenPulseView2(oxygen: oxygendata, value2: "", pulse: pulsedata), isActive: $navigateToNextScreen) {
+        NavigationLink(
+            destination: OxygenPulseView2(oxygen: oxygendata, pulse: pulsedata),
+            isActive: $navigateToNextScreen
+        ) {
             Button("Next") {
                 navigateToNextScreen = true
             }
@@ -152,3 +153,4 @@ struct OxygenPulseView1_Previews: PreviewProvider {
             .previewDevice("iPad Pro (13-inch)")
     }
 }
+

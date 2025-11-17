@@ -5,13 +5,10 @@
 //  Created by Kaukab Farrukh on 2025-05-22.
 //
 
-
-
 import SwiftUI
 
 struct OxygenPulseView2: View {
     var oxygen: String
-    var value2: String
     var pulse: String
 
     @State private var showConfirmation = false
@@ -38,7 +35,8 @@ struct OxygenPulseView2: View {
                     .frame(maxWidth: 700)
                     .onAppear {
                         updateCurrentTime()
-                        oxygenPulseResult = "\(oxygen) / \(value2) / \(pulse)"
+                        // e.g. "95% / 80 bpm"
+                        oxygenPulseResult = "\(oxygen)% / \(pulse) bpm"
                     }
                 }
             }
@@ -101,7 +99,11 @@ struct OxygenPulseView2: View {
             showConfirmation = true
         }
         .alert(isPresented: $showConfirmation) {
-            Alert(title: Text("Saved"), message: Text("Your information has been saved."), dismissButton: .default(Text("OK")))
+            Alert(
+                title: Text("Saved"),
+                message: Text("Your information has been saved."),
+                dismissButton: .default(Text("OK"))
+            )
         }
         .foregroundColor(.white)
         .frame(width: 200, height: 50)
@@ -130,14 +132,16 @@ struct OxygenPulseView2: View {
     }
 
     private func saveInformation() {
-        UserDefaults.standard.set(oxygenPulseResult, forKey: "savedWeight")
-        UserDefaults.standard.set(notice, forKey: "savedNotice")
+        // 👇 use dedicated keys for oxygen & pulse
+        UserDefaults.standard.set(oxygen, forKey: "savedOxygen")
+        UserDefaults.standard.set(pulse, forKey: "savedPulse")
+        UserDefaults.standard.set(notice, forKey: "savedOxygenNotice")
     }
 }
 
 struct OxygenPulseView2_Previews: PreviewProvider {
     static var previews: some View {
-        OxygenPulseView2(oxygen: "95", value2: "78", pulse: "80")
+        OxygenPulseView2(oxygen: "95", pulse: "80")
             .previewDevice("iPad Pro (13-inch)")
             .environment(\.colorScheme, .light)
     }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecommendationsView1: View {
-    @Environment(\.dismiss) private var dismiss   // 👈 to go back to CareHomeView
+    @State private var goHome = false      // controls navigation to CareHomeView
 
     var body: some View {
         ZStack {
@@ -96,7 +96,7 @@ struct RecommendationsView1: View {
                         .padding(.top, 8)
 
                     Button(action: {
-                        dismiss()          // 👈 returns to CareHomeView
+                        goHome = true     // always go to CareHomeView
                     }) {
                         Text("Back to home")
                             .font(.subheadline.weight(.semibold))
@@ -114,6 +114,9 @@ struct RecommendationsView1: View {
         }
         .navigationTitle("Care recommendations")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(isPresented: $goHome) {
+            CareHomeView()          // 👈 always navigates here
+        }
     }
 }
 
